@@ -137,8 +137,8 @@ button:disabled {
 
 .nest {
   position: relative;
-  width: min(100%, 560px);
-  height: 340px;
+  width: min(100%, 620px);
+  height: 420px;
 }
 
 .nest-image {
@@ -147,16 +147,16 @@ button:disabled {
   bottom: 0;
   transform: translateX(-50%);
   width: 100%;
-  max-width: 520px;
-  z-index: 1;
+  max-width: 620px;
+  z-index: 3;
   pointer-events: none;
 }
 
 .egg {
   position: absolute;
-  bottom: 95px;
-  width: 110px;
-  max-width: 24%;
+  width: 105px;
+  max-width: 20%;
+  bottom: 42px;
   transition:
     transform 0.7s ease,
     bottom 0.7s ease,
@@ -166,10 +166,10 @@ button:disabled {
   z-index: 2;
 }
 
-.egg-1 { left: 10%; }
-.egg-2 { left: 30%; }
+.egg-1 { left: 13%; }
+.egg-2 { left: 31%; }
 .egg-3 { left: 50%; }
-.egg-4 { left: 70%; }
+.egg-4 { left: 68%; }
 
 .nest.shaking .egg {
   animation: wobble 0.45s ease-in-out infinite;
@@ -189,7 +189,40 @@ button:disabled {
 }
 
 .egg.revealed {
-  bottom: 180px;
+  bottom: 150px;
+  transform: scale(1.14);
+  filter: drop-shadow(0 0 26px rgba(255, 226, 131, 0.6));
+  z-index: 4;
+}
+
+.egg.faded {
+  opacity: 0.35;
+  filter: grayscale(0.15);
+}
+
+@media (max-width: 640px) {
+  .nest {
+    height: 300px;
+  }
+
+  .nest-image {
+    max-width: 100%;
+  }
+
+  .egg {
+    width: 78px;
+    bottom: 34px;
+  }
+
+  .egg-1 { left: 12%; }
+  .egg-2 { left: 30%; }
+  .egg-3 { left: 49%; }
+  .egg-4 { left: 67%; }
+
+  .egg.revealed {
+    bottom: 120px;
+  }
+}
   transform: scale(1.14);
   filter: drop-shadow(0 0 26px rgba(255, 226, 131, 0.6));
   z-index: 4;
