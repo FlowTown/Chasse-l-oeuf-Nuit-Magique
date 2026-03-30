@@ -1,57 +1,75 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chasse à l'œuf — La Nuit Magique</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Chasse à l'œuf magique</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <main class="page">
-    <section class="card">
-      <p class="badge">Concours de Pâques</p>
-      <h1>Chasse à l'œuf magique</h1>
-      <p class="intro">
-        Renseigne ton email, accepte la newsletter, puis lance le tirage.
-        Un œuf sortira du nid pour révéler ton lot.
-      </p>
 
-      <p id="qr-status" class="qr-status"></p>
+<main class="page">
 
-      <div class="form-block">
-        <input
-          type="email"
-          id="email"
-          placeholder="Ton adresse email"
-          autocomplete="email"
-        />
+  <section class="card">
 
-        <label class="check-row">
-          <input type="checkbox" id="newsletter" />
-          <span>J’accepte de m’inscrire à la newsletter</span>
-        </label>
+    <!-- LOGO -->
+    <img src="assets/logo-nm-gold.png" class="logo" alt="La Nuit Magique">
 
-        <button id="play-btn">Lancer le tirage</button>
-        <p id="form-status" class="form-status"></p>
+    <p class="badge">Concours de Pâques</p>
+
+    <h1>Chasse à l'œuf magique</h1>
+
+    <p class="intro">
+      Renseigne ton email, accepte la newsletter, puis lance le tirage.
+      Un œuf sortira du nid pour révéler ton lot.
+    </p>
+
+    <p id="qr-status" class="qr-status"></p>
+
+    <!-- FORM -->
+    <div class="form-block">
+
+      <input type="email" id="email" placeholder="Ton adresse email">
+
+      <label class="check-row">
+        <input type="checkbox" id="newsletter">
+        <span>J’accepte de m’inscrire à la newsletter</span>
+      </label>
+
+      <button id="play-btn">Lancer le tirage</button>
+
+      <p id="form-status" class="form-status"></p>
+
+    </div>
+
+    <!-- NID -->
+    <div class="nest-zone">
+      <div id="nest" class="nest">
+
+        <!-- OEUFS -->
+        <img src="assets/red-egg.png" class="egg egg-1" data-color="red">
+        <img src="assets/green-egg.png" class="egg egg-2" data-color="green">
+        <img src="assets/blue-egg.png" class="egg egg-3" data-color="blue">
+        <img src="assets/gold-egg.png" class="egg egg-4" data-color="gold">
+
+        <!-- NID -->
+        <img src="assets/nest.png" class="nest-image">
+
       </div>
+    </div>
 
-      <div class="nest-zone">
-        <div id="nest" class="nest">
-          <img src="assets/red-egg.png" alt="Œuf rouge" class="egg egg-1" data-color="red" />
-          <img src="assets/green-egg.png" alt="Œuf vert" class="egg egg-2" data-color="green" />
-          <img src="assets/blue-egg.png" alt="Œuf bleu" class="egg egg-3" data-color="blue" />
-          <img src="assets/gold-egg.png" alt="Œuf or" class="egg egg-4" data-color="gold" />
-          <img src="assets/nest.png" alt="Nid" class="nest-image" />
-        </div>
-      </div>
+    <!-- RESULT -->
+    <div id="result" class="result hidden">
+      <h2 id="result-title"></h2>
+      <p id="result-text"></p>
+    </div>
 
-      <div id="result" class="result hidden">
-        <h2 id="result-title">Résultat</h2>
-        <p id="result-text"></p>
-      </div>
-    </section>
-  </main>
+  </section>
 
-  <script src="script.js"></script>
+</main>
+
+<script src="script.js"></script>
+
 </body>
-</html> 
+</html>
