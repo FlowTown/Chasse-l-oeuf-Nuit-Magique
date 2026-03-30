@@ -285,3 +285,7 @@ button:disabled {
     bottom: 145px;
   }
 }
+.logo {
+  width: 140px;
+  margin-bottom: 12px;
+}
