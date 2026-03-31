@@ -1,5 +1,5 @@
 const TEST_MODE = true;
-const FORCED_EGG = "gold"; // red, green, blue, gold, ou null pour random test
+const FORCED_EGG = "gold"; // red, green, blue, gold, ou null pour random
 
 const params = new URLSearchParams(window.location.search);
 const qr = params.get("qr");
@@ -54,11 +54,14 @@ function resetEggs() {
 function resetOverlay() {
   winOverlay.classList.add("hidden");
   winOverlay.classList.remove("show");
+
   flyingEgg.classList.add("hidden");
   flyingEgg.classList.remove("fly");
   flyingEgg.src = "";
+
   winCard.classList.add("hidden");
   winCard.classList.remove("show");
+
   flashLayer.classList.remove("flash");
   nest.classList.remove("shaking", "flash-win");
 }
@@ -105,6 +108,7 @@ playBtn.addEventListener("click", () => {
 
   isPlaying = true;
   playBtn.disabled = true;
+
   resetEggs();
   resetOverlay();
 
@@ -129,6 +133,7 @@ playBtn.addEventListener("click", () => {
 
     flyingEgg.src = getEggSrc(selectedEgg);
     flyingEgg.alt = selectedEgg.alt;
+
     resultTitle.textContent = "Bravo !";
     resultText.textContent = prize;
 
@@ -143,23 +148,27 @@ playBtn.addEventListener("click", () => {
     setTimeout(() => {
       flashLayer.classList.add("flash");
       nest.classList.add("flash-win");
-    }, 900);
+    }, 980);
 
     setTimeout(() => {
       winCard.classList.remove("hidden");
       winCard.classList.add("show");
+    }, 1120);
+
+    setTimeout(() => {
       formStatus.textContent = TEST_MODE ? "Tirage test terminé." : "Tirage terminé.";
       formStatus.classList.add("ok");
       playBtn.disabled = false;
       isPlaying = false;
-    }, 1200);
+    }, 1450);
   }, 1500);
 });
 
 closeWinBtn.addEventListener("click", () => {
   winOverlay.classList.remove("show");
+
   setTimeout(() => {
     resetOverlay();
     resetEggs();
-  }, 250);
+  }, 300);
 });
