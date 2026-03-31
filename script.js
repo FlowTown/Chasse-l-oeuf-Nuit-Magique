@@ -1,3 +1,6 @@
+const TEST_MODE = true;
+const FORCED_EGG = "gold"; // red, green, blue, gold, ou null pour random en mode test
+
 const params = new URLSearchParams(window.location.search);
 const qr = params.get("qr");
 
@@ -21,9 +24,12 @@ const prizeMap = {
 
 let isPlaying = false;
 
-if (!qr) {
+if (!qr && !TEST_MODE) {
   qrStatus.textContent = "❌ QR code invalide ou manquant";
   qrStatus.classList.add("error");
+} else if (TEST_MODE) {
+  qrStatus.textContent = "🧪 Mode test activé : aucun vrai token consommé";
+  qrStatus.classList.add("ok");
 } else {
   qrStatus.textContent = `✅ QR détecté : ${qr}`;
   qrStatus.classList.add("ok");
@@ -35,9 +41,21 @@ function isValidEmail(email) {
 
 function resetEggs() {
   eggs.forEach((egg) => {
-    egg.classList.remove("revealed", "faded", "winner");
+    egg.classList.remove("revealed", "faded", "winner", "launching");
     egg.style.animationDelay = "0s";
   });
+
+  nest.classList.remove("flash-win");
+  resultBox.classList.add("hidden");
+}
+
+function getSelectedEgg() {
+  if (TEST_MODE && FORCED_EGG) {
+    return [...eggs].find((egg) => egg.dataset.color === FORCED_EGG) || eggs[0];
+  }
+
+  const randomIndex = Math.floor(Math.random() * eggs.length);
+  return eggs[randomIndex];
 }
 
 playBtn.addEventListener("click", () => {
@@ -49,7 +67,7 @@ playBtn.addEventListener("click", () => {
   formStatus.textContent = "";
   formStatus.className = "form-status";
 
-  if (!qr) {
+  if (!TEST_MODE && !qr) {
     formStatus.textContent = "QR invalide, impossible de participer.";
     formStatus.classList.add("error");
     return;
@@ -69,7 +87,6 @@ playBtn.addEventListener("click", () => {
 
   isPlaying = true;
   playBtn.disabled = true;
-  resultBox.classList.add("hidden");
   resetEggs();
 
   nest.classList.add("shaking");
@@ -77,33 +94,42 @@ playBtn.addEventListener("click", () => {
   formStatus.classList.add("ok");
 
   eggs.forEach((egg, index) => {
-    egg.style.animationDelay = `${index * 0.08}s`;
+    egg.style.animationDelay = `${index * 0.06}s`;
   });
 
   setTimeout(() => {
     nest.classList.remove("shaking");
 
-    const randomIndex = Math.floor(Math.random() * eggs.length);
-    const selectedEgg = eggs[randomIndex];
+    const selectedEgg = getSelectedEgg();
     const color = selectedEgg.dataset.color;
     const prize = prizeMap[color];
 
     eggs.forEach((egg) => {
       if (egg === selectedEgg) {
-        egg.classList.add("revealed", "winner");
+        egg.classList.add("revealed", "launching");
       } else {
         egg.classList.add("faded");
       }
     });
 
-    resultTitle.textContent = "Bravo !";
-    resultText.textContent = `L'œuf sélectionné révèle : ${prize}.`;
-    resultBox.classList.remove("hidden");
+    nest.classList.add("flash-win");
 
-    formStatus.textContent = "Tirage terminé.";
-    formStatus.classList.add("ok");
+    setTimeout(() => {
+      selectedEgg.classList.remove("launching");
+      selectedEgg.classList.add("winner");
 
-    isPlaying = false;
-    playBtn.disabled = false;
-  }, 2000);
+      resultTitle.textContent = "Bravo !";
+      resultText.textContent = `L'œuf sélectionné révèle : ${prize}.`;
+      resultBox.classList.remove("hidden");
+
+      formStatus.textContent = TEST_MODE
+        ? "Tirage test terminé."
+        : "Tirage terminé.";
+
+      formStatus.classList.add("ok");
+
+      isPlaying = false;
+      playBtn.disabled = false;
+    }, 900);
+  }, 1600);
 });
