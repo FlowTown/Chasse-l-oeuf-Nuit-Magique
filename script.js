@@ -35,7 +35,8 @@ function isValidEmail(email) {
 
 function resetEggs() {
   eggs.forEach((egg) => {
-    egg.classList.remove("revealed", "faded");
+    egg.classList.remove("revealed", "faded", "winner");
+    egg.style.animationDelay = "0s";
   });
 }
 
@@ -75,6 +76,10 @@ playBtn.addEventListener("click", () => {
   formStatus.textContent = "Le nid s'agite...";
   formStatus.classList.add("ok");
 
+  eggs.forEach((egg, index) => {
+    egg.style.animationDelay = `${index * 0.08}s`;
+  });
+
   setTimeout(() => {
     nest.classList.remove("shaking");
 
@@ -85,7 +90,7 @@ playBtn.addEventListener("click", () => {
 
     eggs.forEach((egg) => {
       if (egg === selectedEgg) {
-        egg.classList.add("revealed");
+        egg.classList.add("revealed", "winner");
       } else {
         egg.classList.add("faded");
       }
@@ -100,5 +105,5 @@ playBtn.addEventListener("click", () => {
 
     isPlaying = false;
     playBtn.disabled = false;
-  }, 2200);
+  }, 2000);
 });
