@@ -328,7 +328,7 @@ h1 {
 }
 
 .flash-layer.flash {
-  animation: screenFlash 0.45s ease forwards;
+  animation: screenFlash 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .win-overlay {
@@ -340,7 +340,7 @@ h1 {
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .win-overlay.show {
@@ -352,15 +352,15 @@ h1 {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at center, rgba(255, 216, 106, 0.12), transparent 35%),
-    rgba(7, 5, 16, 0.72);
-  backdrop-filter: blur(8px);
+    radial-gradient(circle at center, rgba(255, 216, 106, 0.1), transparent 35%),
+    rgba(7, 5, 16, 0.76);
+  backdrop-filter: blur(10px);
 }
 
 .win-stage {
   position: relative;
-  width: min(92vw, 900px);
-  min-height: 520px;
+  width: min(92vw, 920px);
+  min-height: 560px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -372,14 +372,16 @@ h1 {
   width: clamp(120px, 18vw, 220px);
   filter:
     drop-shadow(0 20px 35px rgba(0, 0, 0, 0.35))
-    drop-shadow(0 0 30px rgba(255, 216, 106, 0.25));
+    drop-shadow(0 0 30px rgba(255, 216, 106, 0.18));
   opacity: 0;
-  transform: translateY(240px) scale(0.4) rotate(0deg);
-  z-index: 3;
+  transform: translateY(260px) scale(0.35) rotate(0deg);
+  z-index: 2;
+  pointer-events: none;
+  will-change: transform, opacity;
 }
 
 .flying-egg.fly {
-  animation: eggToCenter 1s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+  animation: eggToCenterSmooth 1.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .win-card {
@@ -388,15 +390,15 @@ h1 {
   border-radius: 30px;
   padding: 40px 28px 30px;
   text-align: center;
-  background:
-    linear-gradient(180deg, rgba(55, 43, 84, 0.98), rgba(28, 21, 48, 0.98));
+  background: linear-gradient(180deg, rgba(55, 43, 84, 0.98), rgba(28, 21, 48, 0.98));
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow:
     0 30px 80px rgba(0, 0, 0, 0.45),
     0 0 40px rgba(255, 216, 106, 0.08);
   opacity: 0;
-  transform: translateY(24px) scale(0.94);
-  z-index: 2;
+  transform: translateY(34px) scale(0.92);
+  z-index: 5;
+  will-change: transform, opacity;
 }
 
 .win-card::before {
@@ -409,7 +411,7 @@ h1 {
 }
 
 .win-card.show {
-  animation: cardReveal 0.55s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+  animation: cardRevealSmooth 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .win-badge {
@@ -485,33 +487,41 @@ h1 {
   50% { margin-bottom: 10px; }
 }
 
-@keyframes eggToCenter {
+@keyframes eggToCenterSmooth {
   0% {
     opacity: 0;
-    transform: translateY(240px) scale(0.4) rotate(0deg);
+    transform: translateY(260px) scale(0.35) rotate(0deg);
   }
-  20% {
+  10% {
     opacity: 1;
-    transform: translateY(120px) scale(0.75) rotate(-6deg);
+    transform: translateY(180px) scale(0.5) rotate(-4deg);
   }
-  55% {
+  35% {
     opacity: 1;
-    transform: translateY(-20px) scale(1.05) rotate(4deg);
+    transform: translateY(40px) scale(0.82) rotate(3deg);
   }
-  75% {
+  60% {
     opacity: 1;
-    transform: translateY(-70px) scale(1.12) rotate(-2deg);
+    transform: translateY(-55px) scale(1.02) rotate(-2deg);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(-92px) scale(1.08) rotate(1deg);
   }
   100% {
     opacity: 1;
-    transform: translateY(-110px) scale(1.08) rotate(0deg);
+    transform: translateY(-105px) scale(1.06) rotate(0deg);
   }
 }
 
-@keyframes cardReveal {
+@keyframes cardRevealSmooth {
   0% {
     opacity: 0;
-    transform: translateY(26px) scale(0.94);
+    transform: translateY(34px) scale(0.92);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.015);
   }
   100% {
     opacity: 1;
@@ -523,8 +533,8 @@ h1 {
   0% {
     opacity: 0;
   }
-  20% {
-    opacity: 0.95;
+  18% {
+    opacity: 0.92;
   }
   100% {
     opacity: 0;
