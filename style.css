@@ -244,6 +244,27 @@ h1 {
   pointer-events: none;
 }
 
+.nest.flash-win::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 70%;
+  height: 46%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 216, 106, 0.35) 0%,
+    rgba(255, 216, 106, 0.16) 35%,
+    rgba(255, 216, 106, 0.05) 60%,
+    rgba(255, 216, 106, 0) 80%
+  );
+  z-index: 2;
+  pointer-events: none;
+  animation: winFlash 0.8s ease forwards;
+}
+
 .egg {
   position: absolute;
   bottom: 0;
@@ -253,6 +274,7 @@ h1 {
   opacity: 0.96;
   filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.38));
   transition: transform 0.45s ease, opacity 0.45s ease, filter 0.45s ease;
+  transform-origin: center bottom;
 }
 
 .egg-1 {
@@ -288,31 +310,41 @@ h1 {
 }
 
 .egg.faded {
-  opacity: 0.18;
-  transform: translateY(18px) scale(0.92);
-  filter: grayscale(0.35) blur(0.4px);
+  opacity: 0.14;
+  transform: translateY(18px) scale(0.9);
+  filter: grayscale(0.4) blur(0.4px);
 }
 
 .egg.revealed {
   opacity: 1;
 }
 
+.egg.launching {
+  animation: eggLaunch 0.9s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+  z-index: 12;
+}
+
 .egg.winner {
-  animation: winnerPop 0.9s ease forwards;
-  z-index: 10;
+  animation: winnerFloat 2s ease-in-out infinite;
+  z-index: 12;
+  filter:
+    drop-shadow(0 12px 18px rgba(0, 0, 0, 0.34))
+    drop-shadow(0 0 18px rgba(255, 216, 106, 0.35));
 }
 
 .result {
   margin-top: 28px;
   padding: 22px 20px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(228, 189, 82, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(228, 189, 82, 0.25);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+  animation: resultPop 0.45s ease;
 }
 
 .result h2 {
   margin: 0 0 8px;
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   color: #ffd76a;
 }
 
@@ -328,32 +360,87 @@ h1 {
 }
 
 @keyframes nestShake {
-  0% { transform: translateX(0) rotate(0deg); }
-  20% { transform: translateX(-4px) rotate(-1deg); }
-  40% { transform: translateX(4px) rotate(1deg); }
-  60% { transform: translateX(-3px) rotate(-0.8deg); }
-  80% { transform: translateX(3px) rotate(0.8deg); }
-  100% { transform: translateX(0) rotate(0deg); }
+  0% {
+    transform: translateX(0) rotate(0deg);
+  }
+  20% {
+    transform: translateX(-4px) rotate(-1deg);
+  }
+  40% {
+    transform: translateX(4px) rotate(1deg);
+  }
+  60% {
+    transform: translateX(-3px) rotate(-0.8deg);
+  }
+  80% {
+    transform: translateX(3px) rotate(0.8deg);
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
 }
 
 @keyframes eggBounce {
-  0%, 100% { margin-bottom: 0; }
-  50% { margin-bottom: 10px; }
+  0%,
+  100% {
+    margin-bottom: 0;
+  }
+  50% {
+    margin-bottom: 10px;
+  }
 }
 
-@keyframes winnerPop {
+@keyframes eggLaunch {
   0% {
-    transform: translateY(0) scale(1);
+    transform: translateY(0) scale(1) rotate(0deg);
   }
-  40% {
-    transform: translateY(-24px) scale(1.08);
+  25% {
+    transform: translateY(-18px) scale(1.03) rotate(-2deg);
   }
-  70% {
-    transform: translateY(-12px) scale(1.14);
+  55% {
+    transform: translateY(-88px) scale(1.12) rotate(2deg);
+  }
+  75% {
+    transform: translateY(-72px) scale(1.1) rotate(-1deg);
   }
   100% {
-    transform: translateY(-18px) scale(1.1);
-    filter: drop-shadow(0 14px 24px rgba(228, 189, 82, 0.32));
+    transform: translateY(-82px) scale(1.12) rotate(0deg);
+  }
+}
+
+@keyframes winnerFloat {
+  0%,
+  100% {
+    transform: translateY(-82px) scale(1.12);
+  }
+  50% {
+    transform: translateY(-92px) scale(1.14);
+  }
+}
+
+@keyframes resultPop {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes winFlash {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.2);
   }
 }
 
