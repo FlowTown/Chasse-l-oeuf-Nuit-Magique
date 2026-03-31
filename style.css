@@ -212,7 +212,7 @@ h1 {
   height: 100%;
   object-fit: contain;
   display: block;
-  z-index: 3;
+  z-index: 1;
   pointer-events: none;
   user-select: none;
 }
@@ -220,11 +220,11 @@ h1 {
 .eggs-layer {
   position: absolute;
   left: 50%;
-  top: 57%;
+  top: 48%;
   transform: translate(-50%, -50%);
   width: 62%;
   height: 34%;
-  z-index: 2;
+  z-index: 5;
 }
 
 .egg {
@@ -236,8 +236,8 @@ h1 {
   filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.28));
   transition:
     transform 0.45s ease,
-    opacity 0.45s ease,
-    filter 0.45s ease;
+  opacity: 0.95;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.4));
 }
 
 .egg-1 {
