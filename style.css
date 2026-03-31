@@ -357,6 +357,158 @@ h1 {
   backdrop-filter: blur(10px);
 }
 
+.fx-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.fx-layer.active {
+  opacity: 1;
+}
+
+.sparkles {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.fx-layer.active .sparkle-a {
+  animation: sparkleDriftA 2.6s ease-out forwards;
+}
+
+.fx-layer.active .sparkle-b {
+  animation: sparkleDriftB 2.8s ease-out 0.12s forwards;
+}
+
+.fx-layer.active .sparkle-c {
+  animation: sparkleDriftC 3s ease-out 0.2s forwards;
+}
+
+.sparkles::before,
+.sparkles::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+}
+
+.sparkle-a::before {
+  background-image:
+    radial-gradient(circle, rgba(255, 235, 170, 0.95) 0 2px, transparent 3px),
+    radial-gradient(circle, rgba(255, 216, 106, 0.9) 0 2px, transparent 3px),
+    radial-gradient(circle, rgba(255, 244, 210, 0.9) 0 1.5px, transparent 3px),
+    radial-gradient(circle, rgba(255, 216, 106, 0.85) 0 2px, transparent 3px),
+    radial-gradient(circle, rgba(255, 235, 170, 0.95) 0 1.8px, transparent 3px);
+  background-size: 100% 100%;
+  background-position:
+    8% 22%,
+    20% 38%,
+    38% 20%,
+    62% 32%,
+    82% 18%;
+}
+
+.sparkle-b::before {
+  background-image:
+    radial-gradient(circle, rgba(255, 235, 170, 0.95) 0 2px, transparent 3px),
+    radial-gradient(circle, rgba(255, 216, 106, 0.9) 0 2px, transparent 3px),
+    radial-gradient(circle, rgba(255, 244, 210, 0.9) 0 1.5px, transparent 3px),
+    radial-gradient(circle, rgba(255, 216, 106, 0.85) 0 2px, transparent 3px),
+    radial-gradient(circle, rgba(255, 235, 170, 0.95) 0 1.8px, transparent 3px);
+  background-size: 100% 100%;
+  background-position:
+    14% 12%,
+    32% 28%,
+    54% 14%,
+    76% 30%,
+    90% 22%;
+}
+
+.sparkle-c::before {
+  background-image:
+    radial-gradient(circle, rgba(255, 235, 170, 0.95) 0 2px, transparent 3px),
+    radial-gradient(circle, rgba(255, 216, 106, 0.9) 0 2px, transparent 3px),
+    radial-gradient(circle, rgba(255, 244, 210, 0.9) 0 1.5px, transparent 3px),
+    radial-gradient(circle, rgba(255, 216, 106, 0.85) 0 2px, transparent 3px),
+    radial-gradient(circle, rgba(255, 235, 170, 0.95) 0 1.8px, transparent 3px);
+  background-size: 100% 100%;
+  background-position:
+    10% 45%,
+    26% 58%,
+    52% 48%,
+    74% 56%,
+    88% 42%;
+}
+
+.firework {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.1);
+}
+
+.firework::before {
+  content: "";
+  position: absolute;
+  inset: -65px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255, 216, 106, 0.95) 0 2px, transparent 3px) 50% 0 / 12px 12px no-repeat,
+    radial-gradient(circle, rgba(255, 235, 170, 0.95) 0 2px, transparent 3px) 85% 15% / 12px 12px no-repeat,
+    radial-gradient(circle, rgba(255, 216, 106, 0.95) 0 2px, transparent 3px) 100% 50% / 12px 12px no-repeat,
+    radial-gradient(circle, rgba(255, 244, 210, 0.95) 0 2px, transparent 3px) 85% 85% / 12px 12px no-repeat,
+    radial-gradient(circle, rgba(255, 216, 106, 0.95) 0 2px, transparent 3px) 50% 100% / 12px 12px no-repeat,
+    radial-gradient(circle, rgba(255, 235, 170, 0.95) 0 2px, transparent 3px) 15% 85% / 12px 12px no-repeat,
+    radial-gradient(circle, rgba(255, 216, 106, 0.95) 0 2px, transparent 3px) 0 50% / 12px 12px no-repeat,
+    radial-gradient(circle, rgba(255, 244, 210, 0.95) 0 2px, transparent 3px) 15% 15% / 12px 12px no-repeat;
+  filter: drop-shadow(0 0 10px rgba(255, 216, 106, 0.65));
+}
+
+.firework-1 {
+  left: 18%;
+  top: 24%;
+}
+
+.firework-2 {
+  left: 78%;
+  top: 18%;
+}
+
+.firework-3 {
+  left: 52%;
+  top: 12%;
+}
+
+.fx-layer.active .firework-1 {
+  animation: fireworkBurst 1.2s ease-out 0.05s forwards;
+}
+
+.fx-layer.active .firework-2 {
+  animation: fireworkBurst 1.25s ease-out 0.18s forwards;
+}
+
+.fx-layer.active .firework-3 {
+  animation: fireworkBurst 1.35s ease-out 0.28s forwards;
+}
+
+.particle {
+  position: absolute;
+  width: 9px;
+  height: 16px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fff4c9 0%, #ffd76a 50%, #dca92d 100%);
+  box-shadow: 0 0 12px rgba(255, 216, 106, 0.4);
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(0deg) scale(0.2);
+  animation: particleBurst var(--dur) ease-out var(--delay) forwards;
+}
+
 .win-stage {
   position: relative;
   width: min(92vw, 920px);
@@ -541,6 +693,82 @@ h1 {
   }
 }
 
+@keyframes sparkleDriftA {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.9);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(90px) scale(1.05);
+  }
+}
+
+@keyframes sparkleDriftB {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.85);
+  }
+  22% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(110px) scale(1.08);
+  }
+}
+
+@keyframes sparkleDriftC {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.88);
+  }
+  24% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(125px) scale(1.1);
+  }
+}
+
+@keyframes fireworkBurst {
+  0% {
+    opacity: 0;
+    transform: scale(0.1);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(0.65);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+}
+
+@keyframes particleBurst {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(0deg) scale(0.2);
+  }
+  18% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(var(--rot)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--rot)) scale(0.7);
+  }
+}
+
 @media (max-width: 700px) {
   .page {
     padding: 16px;
@@ -618,5 +846,20 @@ h1 {
   .close-win-btn {
     width: 100%;
     min-width: 0;
+  }
+
+  .firework-1 {
+    left: 12%;
+    top: 26%;
+  }
+
+  .firework-2 {
+    left: 84%;
+    top: 22%;
+  }
+
+  .firework-3 {
+    left: 50%;
+    top: 14%;
   }
 }
