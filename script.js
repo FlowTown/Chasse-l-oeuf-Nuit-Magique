@@ -1,5 +1,5 @@
 const TEST_MODE = true;
-const FORCED_EGG = "gold"; // red, green, blue, gold, ou null pour random en mode test
+const FORCED_EGG = "gold"; // red, green, blue, gold, ou null pour random test
 
 const params = new URLSearchParams(window.location.search);
 const qr = params.get("qr");
@@ -11,15 +11,20 @@ const playBtn = document.getElementById("play-btn");
 const formStatus = document.getElementById("form-status");
 const nest = document.getElementById("nest");
 const eggs = document.querySelectorAll(".egg");
-const resultBox = document.getElementById("result");
+
+const flashLayer = document.getElementById("flash-layer");
+const winOverlay = document.getElementById("win-overlay");
+const flyingEgg = document.getElementById("flying-egg");
+const winCard = document.getElementById("win-card");
+const closeWinBtn = document.getElementById("close-win-btn");
 const resultTitle = document.getElementById("result-title");
 const resultText = document.getElementById("result-text");
 
 const prizeMap = {
-  red: "1 pass 1 jour",
-  green: "1 pass 3 jours",
-  blue: "2 pass 1 jour",
-  gold: "2 pass 3 jours"
+  red: "Tu remportes 1 pass 1 jour",
+  green: "Tu remportes 1 pass 3 jours",
+  blue: "Tu remportes 2 pass 1 jour",
+  gold: "Tu remportes 2 pass 3 jours"
 };
 
 let isPlaying = false;
@@ -41,12 +46,21 @@ function isValidEmail(email) {
 
 function resetEggs() {
   eggs.forEach((egg) => {
-    egg.classList.remove("revealed", "faded", "winner", "launching");
+    egg.classList.remove("revealed", "faded");
     egg.style.animationDelay = "0s";
   });
+}
 
-  nest.classList.remove("flash-win");
-  resultBox.classList.add("hidden");
+function resetOverlay() {
+  winOverlay.classList.add("hidden");
+  winOverlay.classList.remove("show");
+  flyingEgg.classList.add("hidden");
+  flyingEgg.classList.remove("fly");
+  flyingEgg.src = "";
+  winCard.classList.add("hidden");
+  winCard.classList.remove("show");
+  flashLayer.classList.remove("flash");
+  nest.classList.remove("shaking", "flash-win");
 }
 
 function getSelectedEgg() {
@@ -56,6 +70,10 @@ function getSelectedEgg() {
 
   const randomIndex = Math.floor(Math.random() * eggs.length);
   return eggs[randomIndex];
+}
+
+function getEggSrc(egg) {
+  return egg.getAttribute("src");
 }
 
 playBtn.addEventListener("click", () => {
@@ -88,14 +106,11 @@ playBtn.addEventListener("click", () => {
   isPlaying = true;
   playBtn.disabled = true;
   resetEggs();
+  resetOverlay();
 
   nest.classList.add("shaking");
   formStatus.textContent = "Le nid s'agite...";
   formStatus.classList.add("ok");
-
-  eggs.forEach((egg, index) => {
-    egg.style.animationDelay = `${index * 0.06}s`;
-  });
 
   setTimeout(() => {
     nest.classList.remove("shaking");
@@ -106,30 +121,45 @@ playBtn.addEventListener("click", () => {
 
     eggs.forEach((egg) => {
       if (egg === selectedEgg) {
-        egg.classList.add("revealed", "launching");
+        egg.classList.add("revealed");
       } else {
         egg.classList.add("faded");
       }
     });
 
-    nest.classList.add("flash-win");
+    flyingEgg.src = getEggSrc(selectedEgg);
+    flyingEgg.alt = selectedEgg.alt;
+    resultTitle.textContent = "Bravo !";
+    resultText.textContent = prize;
+
+    winOverlay.classList.remove("hidden");
+
+    requestAnimationFrame(() => {
+      winOverlay.classList.add("show");
+      flyingEgg.classList.remove("hidden");
+      flyingEgg.classList.add("fly");
+    });
 
     setTimeout(() => {
-      selectedEgg.classList.remove("launching");
-      selectedEgg.classList.add("winner");
-
-      resultTitle.textContent = "Bravo !";
-      resultText.textContent = `L'œuf sélectionné révèle : ${prize}.`;
-      resultBox.classList.remove("hidden");
-
-      formStatus.textContent = TEST_MODE
-        ? "Tirage test terminé."
-        : "Tirage terminé.";
-
-      formStatus.classList.add("ok");
-
-      isPlaying = false;
-      playBtn.disabled = false;
+      flashLayer.classList.add("flash");
+      nest.classList.add("flash-win");
     }, 900);
-  }, 1600);
+
+    setTimeout(() => {
+      winCard.classList.remove("hidden");
+      winCard.classList.add("show");
+      formStatus.textContent = TEST_MODE ? "Tirage test terminé." : "Tirage terminé.";
+      formStatus.classList.add("ok");
+      playBtn.disabled = false;
+      isPlaying = false;
+    }, 1200);
+  }, 1500);
+});
+
+closeWinBtn.addEventListener("click", () => {
+  winOverlay.classList.remove("show");
+  setTimeout(() => {
+    resetOverlay();
+    resetEggs();
+  }, 250);
 });
