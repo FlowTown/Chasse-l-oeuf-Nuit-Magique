@@ -19,6 +19,7 @@ const winCard = document.getElementById("win-card");
 const closeWinBtn = document.getElementById("close-win-btn");
 const resultTitle = document.getElementById("result-title");
 const resultText = document.getElementById("result-text");
+const fxLayer = document.getElementById("fx-layer");
 
 const prizeMap = {
   red: "Tu remportes 1 pass 1 jour",
@@ -51,6 +52,11 @@ function resetEggs() {
   });
 }
 
+function clearParticles() {
+  const particles = fxLayer.querySelectorAll(".particle");
+  particles.forEach((particle) => particle.remove());
+}
+
 function resetOverlay() {
   winOverlay.classList.add("hidden");
   winOverlay.classList.remove("show");
@@ -64,6 +70,9 @@ function resetOverlay() {
 
   flashLayer.classList.remove("flash");
   nest.classList.remove("shaking", "flash-win");
+  fxLayer.classList.remove("active");
+
+  clearParticles();
 }
 
 function getSelectedEgg() {
@@ -77,6 +86,32 @@ function getSelectedEgg() {
 
 function getEggSrc(egg) {
   return egg.getAttribute("src");
+}
+
+function createBurst(xPercent, yPercent, count = 18) {
+  for (let i = 0; i < count; i++) {
+    const particle = document.createElement("span");
+    particle.className = "particle";
+
+    const angle = (Math.PI * 2 * i) / count + Math.random() * 0.4;
+    const distance = 70 + Math.random() * 90;
+    const dx = Math.cos(angle) * distance;
+    const dy = Math.sin(angle) * distance;
+
+    particle.style.left = `${xPercent}%`;
+    particle.style.top = `${yPercent}%`;
+    particle.style.setProperty("--dx", `${dx}px`);
+    particle.style.setProperty("--dy", `${dy}px`);
+    particle.style.setProperty("--delay", `${Math.random() * 0.12}s`);
+    particle.style.setProperty("--dur", `${0.9 + Math.random() * 0.5}s`);
+    particle.style.setProperty("--rot", `${Math.random() * 240 - 120}deg`);
+
+    fxLayer.appendChild(particle);
+
+    setTimeout(() => {
+      particle.remove();
+    }, 1800);
+  }
 }
 
 playBtn.addEventListener("click", () => {
@@ -148,6 +183,11 @@ playBtn.addEventListener("click", () => {
     setTimeout(() => {
       flashLayer.classList.add("flash");
       nest.classList.add("flash-win");
+      fxLayer.classList.add("active");
+
+      createBurst(22, 28, 16);
+      createBurst(78, 24, 18);
+      createBurst(50, 18, 20);
     }, 980);
 
     setTimeout(() => {
