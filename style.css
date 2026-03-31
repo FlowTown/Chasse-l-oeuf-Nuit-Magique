@@ -6,7 +6,6 @@
   --text: #f7f4fb;
   --muted: #d4ccdf;
   --gold: #e4bd52;
-  --gold-dark: #b68a22;
   --green: #7df0a6;
   --red: #ff8d8d;
   --input: rgba(255, 255, 255, 0.06);
@@ -25,8 +24,7 @@ body {
   min-height: 100%;
   font-family: Arial, Helvetica, sans-serif;
   color: var(--text);
-  background:
-    radial-gradient(circle at top, #2a2142 0%, #171124 40%, #0f0a19 100%);
+  background: radial-gradient(circle at top, #2a2142 0%, #171124 40%, #0f0a19 100%);
 }
 
 body {
@@ -58,8 +56,7 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background:
-    radial-gradient(circle at top center, rgba(228, 189, 82, 0.07), transparent 30%);
+  background: radial-gradient(circle at top center, rgba(228, 189, 82, 0.07), transparent 30%);
 }
 
 .logo {
@@ -220,48 +217,66 @@ h1 {
 .eggs-layer {
   position: absolute;
   left: 50%;
-  top: 48%;
+  top: 52%;
   transform: translate(-50%, -50%);
-  width: 62%;
-  height: 34%;
-  z-index: 5;
+  width: 54%;
+  height: 28%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.nest::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 53%;
+  transform: translate(-50%, -50%);
+  width: 58%;
+  height: 26%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.38) 0%,
+    rgba(0, 0, 0, 0.22) 45%,
+    rgba(0, 0, 0, 0) 75%
+  );
+  z-index: 4;
+  pointer-events: none;
 }
 
 .egg {
   position: absolute;
   bottom: 0;
-  width: 22%;
-  max-width: 96px;
+  width: 21%;
+  max-width: 92px;
   object-fit: contain;
-  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.28));
-  transition:
-    transform 0.45s ease,
-  opacity: 0.95;
-  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.4));
+  opacity: 0.96;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.38));
+  transition: transform 0.45s ease, opacity 0.45s ease, filter 0.45s ease;
 }
 
 .egg-1 {
-  left: 2%;
+  left: 6%;
   z-index: 1;
-  transform: translateY(10px) rotate(-8deg);
+  transform: translateY(6px) rotate(-8deg);
 }
 
 .egg-2 {
-  left: 25%;
+  left: 28%;
   z-index: 2;
-  transform: translateY(2px) rotate(-2deg);
+  transform: translateY(0) rotate(-3deg);
 }
 
 .egg-3 {
-  left: 49%;
+  left: 50%;
   z-index: 3;
-  transform: translateY(0) rotate(5deg);
+  transform: translateY(-2px) rotate(4deg);
 }
 
 .egg-4 {
-  left: 73%;
+  left: 72%;
   z-index: 2;
-  transform: translateY(8px) rotate(9deg);
+  transform: translateY(5px) rotate(8deg);
 }
 
 .nest.shaking {
@@ -388,12 +403,18 @@ h1 {
   }
 
   .eggs-layer {
-    width: 66%;
-    top: 58%;
-    height: 32%;
+    top: 53%;
+    width: 58%;
+    height: 28%;
+  }
+
+  .nest::after {
+    top: 54%;
+    width: 62%;
+    height: 24%;
   }
 
   .egg {
-    width: 24%;
+    width: 22%;
   }
 }
