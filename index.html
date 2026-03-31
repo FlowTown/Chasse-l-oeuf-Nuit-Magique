@@ -52,13 +52,25 @@
           </div>
         </div>
       </div>
-
-      <div id="result" class="result hidden">
-        <h2 id="result-title">Résultat</h2>
-        <p id="result-text"></p>
-      </div>
     </section>
   </main>
+
+  <div id="flash-layer" class="flash-layer"></div>
+
+  <div id="win-overlay" class="win-overlay hidden">
+    <div class="win-backdrop"></div>
+
+    <div class="win-stage">
+      <img id="flying-egg" class="flying-egg hidden" src="" alt="Œuf gagnant" />
+
+      <div id="win-card" class="win-card hidden">
+        <p class="win-badge">Félicitations</p>
+        <h2 id="result-title">Bravo !</h2>
+        <p id="result-text" class="win-text"></p>
+        <button id="close-win-btn" class="close-win-btn">Continuer</button>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
