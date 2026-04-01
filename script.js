@@ -1,6 +1,3 @@
-const TEST_MODE = true;
-const FORCED_EGG = "gold"; // red, green, blue, gold, ou null pour random
-
 const params = new URLSearchParams(window.location.search);
 const qr = params.get("qr");
 
@@ -21,23 +18,20 @@ const resultTitle = document.getElementById("result-title");
 const resultText = document.getElementById("result-text");
 const fxLayer = document.getElementById("fx-layer");
 
-const prizeMap = {
-  red: "Tu remportes 1 pass 1 jour",
-  green: "Tu remportes 1 pass 3 jours",
-  blue: "Tu remportes 2 pass 1 jour",
-  gold: "Tu remportes 2 pass 3 jours"
-};
-
 let isPlaying = false;
 
-if (!qr && !TEST_MODE) {
-  qrStatus.textContent = "❌ QR code invalide ou manquant";
+const prizeToEgg = {
+  "1 pass 1 jour": "red",
+  "1 pass 3 jours": "green",
+  "2 pass 1 jour": "blue",
+  "2 pass 3 jours": "gold"
+};
+
+if (!qr) {
+  qrStatus.textContent = "❌ QR code invalide";
   qrStatus.classList.add("error");
-} else if (TEST_MODE) {
-  qrStatus.textContent = "🧪 Mode test activé : aucun vrai token consommé";
-  qrStatus.classList.add("ok");
 } else {
-  qrStatus.textContent = `✅ QR détecté : ${qr}`;
+  qrStatus.textContent = "🎟️ QR détecté";
   qrStatus.classList.add("ok");
 }
 
@@ -64,6 +58,7 @@ function resetOverlay() {
   flyingEgg.classList.add("hidden");
   flyingEgg.classList.remove("fly");
   flyingEgg.src = "";
+  flyingEgg.alt = "Œuf gagnant";
 
   winCard.classList.add("hidden");
   winCard.classList.remove("show");
@@ -75,17 +70,28 @@ function resetOverlay() {
   clearParticles();
 }
 
-function getSelectedEgg() {
-  if (TEST_MODE && FORCED_EGG) {
-    return [...eggs].find((egg) => egg.dataset.color === FORCED_EGG) || eggs[0];
+async function playRealGame(token, email, newsletterAccepted) {
+  if (!window.supabase) {
+    throw new Error("Supabase n'est pas initialisé.");
   }
 
-  const randomIndex = Math.floor(Math.random() * eggs.length);
-  return eggs[randomIndex];
-}
+  const { data, error } = await window.supabase.functions.invoke("play-egg-game", {
+    body: {
+      token,
+      email,
+      newsletterAccepted
+    }
+  });
 
-function getEggSrc(egg) {
-  return egg.getAttribute("src");
+  if (error) {
+    throw new Error(error.message || "Erreur Supabase");
+  }
+
+  if (data?.error) {
+    throw new Error(data.error);
+  }
+
+  return data;
 }
 
 function createBurst(xPercent, yPercent, count = 18) {
@@ -114,7 +120,7 @@ function createBurst(xPercent, yPercent, count = 18) {
   }
 }
 
-playBtn.addEventListener("click", () => {
+playBtn.addEventListener("click", async () => {
   if (isPlaying) return;
 
   const email = emailInput.value.trim();
@@ -123,8 +129,8 @@ playBtn.addEventListener("click", () => {
   formStatus.textContent = "";
   formStatus.className = "form-status";
 
-  if (!TEST_MODE && !qr) {
-    formStatus.textContent = "QR invalide, impossible de participer.";
+  if (!qr) {
+    formStatus.textContent = "QR invalide.";
     formStatus.classList.add("error");
     return;
   }
@@ -148,15 +154,18 @@ playBtn.addEventListener("click", () => {
   resetOverlay();
 
   nest.classList.add("shaking");
-  formStatus.textContent = "Le nid s'agite...";
+  formStatus.textContent = "Le tirage commence...";
   formStatus.classList.add("ok");
 
-  setTimeout(() => {
-    nest.classList.remove("shaking");
+  try {
+    const response = await playRealGame(qr, email, newsletterAccepted);
 
-    const selectedEgg = getSelectedEgg();
-    const color = selectedEgg.dataset.color;
-    const prize = prizeMap[color];
+    const selectedColor = prizeToEgg[response.prize];
+    const selectedEgg = [...eggs].find((egg) => egg.dataset.color === selectedColor);
+
+    if (!selectedEgg) {
+      throw new Error("Lot reçu inconnu.");
+    }
 
     eggs.forEach((egg) => {
       if (egg === selectedEgg) {
@@ -166,42 +175,53 @@ playBtn.addEventListener("click", () => {
       }
     });
 
-    flyingEgg.src = getEggSrc(selectedEgg);
-    flyingEgg.alt = selectedEgg.alt;
+    flyingEgg.src = selectedEgg.getAttribute("src");
+    flyingEgg.alt = selectedEgg.getAttribute("alt") || "Œuf gagnant";
 
     resultTitle.textContent = "Bravo !";
-    resultText.textContent = prize;
-
-    winOverlay.classList.remove("hidden");
-
-    requestAnimationFrame(() => {
-      winOverlay.classList.add("show");
-      flyingEgg.classList.remove("hidden");
-      flyingEgg.classList.add("fly");
-    });
+    resultText.textContent = response.prize;
 
     setTimeout(() => {
-      flashLayer.classList.add("flash");
-      nest.classList.add("flash-win");
-      fxLayer.classList.add("active");
+      nest.classList.remove("shaking");
 
-      createBurst(22, 28, 16);
-      createBurst(78, 24, 18);
-      createBurst(50, 18, 20);
-    }, 980);
+      winOverlay.classList.remove("hidden");
 
-    setTimeout(() => {
-      winCard.classList.remove("hidden");
-      winCard.classList.add("show");
-    }, 1120);
+      requestAnimationFrame(() => {
+        winOverlay.classList.add("show");
+        flyingEgg.classList.remove("hidden");
+        flyingEgg.classList.add("fly");
+      });
 
-    setTimeout(() => {
-      formStatus.textContent = TEST_MODE ? "Tirage test terminé." : "Tirage terminé.";
-      formStatus.classList.add("ok");
-      playBtn.disabled = false;
-      isPlaying = false;
-    }, 1450);
-  }, 1500);
+      setTimeout(() => {
+        flashLayer.classList.add("flash");
+        nest.classList.add("flash-win");
+        fxLayer.classList.add("active");
+
+        createBurst(22, 28, 16);
+        createBurst(78, 24, 18);
+        createBurst(50, 18, 20);
+      }, 980);
+
+      setTimeout(() => {
+        winCard.classList.remove("hidden");
+        winCard.classList.add("show");
+      }, 1120);
+
+      setTimeout(() => {
+        formStatus.textContent = "Tirage terminé.";
+        formStatus.classList.add("ok");
+        playBtn.disabled = false;
+        isPlaying = false;
+      }, 1450);
+    }, 1200);
+  } catch (err) {
+    nest.classList.remove("shaking");
+
+    formStatus.textContent = err?.message || "Une erreur est survenue.";
+    formStatus.className = "form-status error";
+    playBtn.disabled = false;
+    isPlaying = false;
+  }
 });
 
 closeWinBtn.addEventListener("click", () => {
