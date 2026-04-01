@@ -82,6 +82,15 @@
     </div>
   </div>
 
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    window.supabase = createClient(
+      'https://TON-PROJET.supabase.co',
+      'TA_PUBLISHABLE_KEY'
+    );
+  </script>
+
   <script src="script.js"></script>
 </body>
 </html>
